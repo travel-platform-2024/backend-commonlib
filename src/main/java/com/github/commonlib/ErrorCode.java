@@ -15,8 +15,10 @@ public enum ErrorCode {
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "E40102"),
     INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "E40103"),
 
+
     //403
     FORBIDDEN(HttpStatus.FORBIDDEN,"E40301"),
+    AUTHENTICAITON_ERROR(HttpStatus.FORBIDDEN, "E40302"),
 
     //409
     EMAIL_CONFLICT(HttpStatus.CONFLICT, "E40901");
@@ -31,8 +33,8 @@ public enum ErrorCode {
         this.errorCode = errorCode;
     }
 
-    public static ErrorResponse getErrorResponse(ErrorCode errorCode) {
-       return ErrorResponse.builder()
+    public static ErrorCodeDto getErrorResponse(ErrorCode errorCode) {
+       return ErrorCodeDto.builder()
                .httpStatus(errorCode.getHttpStatus().value())
                .errorCode(errorCode.getErrorCode())
                .build();
