@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'java-library'
+    id 'maven-publish'
 }
 
 group = 'com.github'
@@ -13,6 +15,25 @@ java {
     }
 }
 
+publishing {
+    publications {
+        mavenJava(MavenPublication){
+            groupId = 'com.library'
+            artifactId = 'common'
+            version = '1.0'
+
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+}
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
