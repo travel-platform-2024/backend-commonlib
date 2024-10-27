@@ -20,6 +20,9 @@ public class ApiResponse<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private ErrorCode errorCode;
+
     private ApiResponse(String status, T data, String message) {
         this.status = status;
         this.data = data;
