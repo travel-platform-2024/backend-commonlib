@@ -8,11 +8,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ApiResponse<T> {
 
-    private static final String STATUS_SUCCESS = "success";
-    private static final String STATUS_FAIL = "fail";
-    private static final String STATUS_ERROR = "error";
-
-    private String status;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
@@ -21,27 +16,37 @@ public class ApiResponse<T> {
     private T data;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ErrorCode errorCode;
+    private ErrorResponse error;
 
-    private ApiResponse(String status, T data, String message) {
-        this.status = status;
+    private ApiResponse(T data, String message) {
         this.data = data;
         this.message = message;
     }
 
+    private ApiResponse(ErrorCode errorCode) {
+
+        this.error = ErrorCode.getErrorResponse(errorCode);
+    }
+
+    private ApiResponse(ErrorCode errorCode, String message) {
+        this.error = ErrorCode.getErrorResponse(errorCode);
+        this.error.setErrorMessage(message);
+    }
+
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(STATUS_SUCCESS, data, null);
+        return new ApiResponse<>(data, null);
     }
 
     public static <T> ApiResponse<T> success(T data, String message) {
-        return new ApiResponse<>(STATUS_SUCCESS, data, message);
+        return new ApiResponse<>(data, message);
     }
 
-    public static <T> ApiResponse<T> fail(String message) {
-        return new ApiResponse<>(STATUS_FAIL, null, message);
+
+    public static <T> ApiResponse<T> error(ErrorCode errorCode, String message) {
+        return new ApiResponse<>(errorCode, message);
     }
 
-    public static <T> ApiResponse<T> error(String message) {
-        return new ApiResponse<>(STATUS_ERROR, null, message);
+    public static <T> ApiResponse<T> error(ErrorCode errorCode) {
+        return new ApiResponse<>(errorCode);
     }
 }
