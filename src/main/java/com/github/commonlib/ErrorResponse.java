@@ -10,10 +10,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class ErrorResponse {
 
-    private int httpStatus;
+    private ErrorCodeDto error;
 
-    private String errorCode;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String errorMessage;
+    public ErrorResponse(ErrorCode errorCode, String errorMessage){
+        this.error = ErrorCodeDto.builder()
+                .httpStatus(errorCode.getHttpStatus().value())
+                .errorCode(errorCode.getErrorCode())
+                .errorMessage(errorMessage)
+                .build();
+    }
 }
